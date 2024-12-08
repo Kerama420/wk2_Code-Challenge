@@ -1,68 +1,72 @@
-// Shopping List Array
 let shoppingList = [];
 
-// Select DOM Elements
-const itemInput = document.getElementById("itemInput");
-const addButton = document.getElementById("addButton");
-const clearButton = document.getElementById("clearButton");
-const shoppingListContainer = document.getElementById("shoppingList");
+const form = document.querySelector('#shopping-form');
+const container = document.querySelector('.container');
 
-// Add item to the list
-addButton.addEventListener("click", () => {
-    const item = itemInput.value.trim();
-    if (item) {
-        shoppingList.push({ name: item, purchased: false });
-        renderList();
-        itemInput.value = ""; // Clear input field
-    }
-});
+// Function to display items in the shopping list
+function displayItems() {
+  container.innerHTML = ''; // Clear the container before rendering
 
-// Mark item as purchased
-shoppingListContainer.addEventListener("click", (event) => {
-    if (event.target.tagName === "LI") {
-        const index = event.target.dataset.index;
-        shoppingList[index].purchased = !shoppingList[index].purchased;
-        renderList();
-    }
-});
+  shoppingList.forEach((item, index) => {
+    const itemCard = `
+      <div class="item ${item.purchased ? 'purchased' : ''}">
+        <div id="details-${index}">
+          <h4 class="title">${item.name}</h4>
+          <p class="price">Ksh ${item.price}</p>
+        </div>
+        <div class="check">
+          <input 
+            type="checkbox" 
+            id="mark-${index}" 
+            ${item.purchased ? 'checked' : ''} 
+            onclick="togglePurchased(${index})" 
+          />
+          <label for="mark-${index}">Mark as purchased</label>
+        </div>
+      </div>
+    `;
 
-// Clear the list
-clearButton.addEventListener("click", () => {
-    shoppingList = [];
-    renderList();
-});
+    container.insertAdjacentHTML('beforeend', itemCard);
+  });
 
-// Render the list
-function renderList() {
-    shoppingListContainer.innerHTML = ""; // Clear current list
-    shoppingList.forEach((item, index) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = item.name;
-        listItem.dataset.index = index;
-        listItem.className = item.purchased ? "purchased" : "";
-        shoppingListContainer.appendChild(listItem);
-    });
-}
-// Save list to local storage
-function saveList() {
-    localStorage.setItem("shoppingList", JSON.stringify(shoppingList));
+  toggleClearButton();
 }
 
-// Load list from local storage
-function loadList() {
-    const savedList = JSON.parse(localStorage.getItem("shoppingList"));
-    if (savedList) {
-        shoppingList = savedList;
-        renderList();
-    }
+// Function to toggle purchased state
+function togglePurchased(index) {
+  shoppingList[index].purchased = !shoppingList[index].purchased; // Toggle purchased state
+  displayItems(); // Re-render the list
 }
 
-// Call loadList on page load
-window.addEventListener("DOMContentLoaded", loadList);
-listItem.addEventListener("dblclick", () => {
-    const newName = prompt("Edit item name:", item.name);
-    if (newName) {
-        shoppingList[index].name = newName.trim();
-        renderList();
-    }
+// Function to toggle visibility of "Clear List" button
+function toggleClearButton() {
+  const btns = document.querySelector('.btn-sections');
+  if (shoppingList.length > 0) {
+    btns.classList.remove('hidden');
+  } else {
+    btns.classList.add('hidden');
+  }
+}
+
+// Function to handle form submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const itemName = e.target.product.value;
+  const itemPrice = e.target.price.value;
+
+  // Add new item to the shopping list
+  shoppingList.push({
+    name: itemName,
+    price: itemPrice,
+    purchased: false,
+  });
+
+  form.reset();
+  displayItems();
+});
+
+// Function to clear the entire list
+document.querySelector('.clear-list').addEventListener('click', () => {
+  shoppingList = [];
+  displayItems(); // Clear the UI
 });

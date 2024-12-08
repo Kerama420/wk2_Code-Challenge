@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Shopping List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .purchased {
-            text-decoration: line-through;
-            background-color: #d3ffd3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Interactive Shopping List</title>
 </head>
 <body>
-    <h1>Shopping List</h1>
-    <input type="text" id="itemInput" placeholder="Enter an item" />
-    <button id="addButton">Add</button>
-    <button id="clearButton">Clear List</button>
-    <ul id="shoppingList"></ul>
+  <h1>Interactive Shopping List</h1>
 
-    <script src="script.js"></script>
+  <div class="list-form">
+    <form id="shopping-form">
+      <input type="text" placeholder="Item name" id="product" required>
+      <input type="number" placeholder="Price" id="price" required>
+      <button type="submit">Add</button>
+    </form>
+  </div>
+
+  <section class="container"></section>
+  <section class="btn-sections hidden">
+    <button class="clear-list">Clear list</button>
+  </section>
+
+  <script src="index.js"></script>
 </body>
 </html>
